@@ -58,14 +58,23 @@ class Settings(BaseSettings):
     # Display name shown on the main Keycloak user login page
     keycloak_realm_display_name: str = "OS2mo"
 
-    # Frontend page that Keycloak is allowed to redirect users back to after they
+    # Frontend page(s) that Keycloak is allowed to redirect users back to after they
     # have authenticated successfully in Keycloak
     keycloak_mo_client_redirect_uri: List[Union[AnyHttpUrl, Literal["*"]]] = [
         parse_obj_as(AnyHttpUrl, "http://localhost:5001/*")
     ]
 
+    keycloak_egir_client_redirect_uri: List[Union[AnyHttpUrl, Literal["*"]]] = [
+        parse_obj_as(AnyHttpUrl, "http://localhost:5001/*")
+    ]
+
+
     # Allowed CORS origins
     keycloak_mo_client_web_origin: List[Union[AnyHttpUrl, Literal["*"]]] = [
+        parse_obj_as(AnyHttpUrl, "http://localhost:5001")
+    ]
+
+    keycloak_egir_client_web_origin: List[Union[AnyHttpUrl, Literal["*"]]] = [
         parse_obj_as(AnyHttpUrl, "http://localhost:5001")
     ]
 
@@ -81,6 +90,12 @@ class Settings(BaseSettings):
     # * https://git.magenta.dk/rammearkitektur/os2mo/-/blob/development/backend/ \
     #       tests/manual/keycloak-client-secret.py
     keycloak_dipex_client_secret: Optional[str]
+
+    # Toggles EGIR client enablement
+    keycloak_egir_client_enabled: bool = False
+
+    # The EGIR client secret
+    keycloak_egir_client_secret: Optional[str]
 
     # The MO realm will have the users below auto-provisioned
     # which can be handy for testing purposes
@@ -118,6 +133,7 @@ class Settings(BaseSettings):
                 "keycloak_idp_signon_service_url",
             ),
             "keycloak_dipex_client_enabled": ("keycloak_dipex_client_secret",),
+            "keycloak_egir_client_enabled": ("keycloak_egir_client_secret",),
         }
         for main_key, required_keys in optionally_required_fields.items():
             if not values[main_key]:

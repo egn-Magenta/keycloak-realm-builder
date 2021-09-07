@@ -126,6 +126,10 @@ class Settings(BaseSettings):
     # https://www.keycloak.org/docs/latest/server_installation/#_setting_up_ssl
     keycloak_ssl_required: str = "all"
 
+    # LoRa
+    keycloak_lora_realm_enabled: bool = False
+    keycloak_lora_client_secret: Optional[str]
+
     @root_validator
     def optionally_required(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         """Check that derived keys are set if master switch is set."""
@@ -139,6 +143,7 @@ class Settings(BaseSettings):
             ),
             "keycloak_dipex_client_enabled": ("keycloak_dipex_client_secret",),
             "keycloak_egir_client_enabled": ("keycloak_egir_client_secret",),
+            "keycloak_lora_realm_enabled": ("keycloak_lora_client_secret",),
         }
         for main_key, required_keys in optionally_required_fields.items():
             if not values[main_key]:

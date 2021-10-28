@@ -61,6 +61,13 @@ services:
           "enabled": true
         }
       ]'
+      KEYCLOAK_API_CLIENTS: '[
+        {
+          "client_id": "whatever",
+          "client_secret": "5148ef0e-de24-4bf5-be78-8b51a677826a",
+          "token_lifespan": 900
+        }
+      ]'
       KEYCLOAK_MO_CLIENT_REDIRECT_URI: '["http://localhost:5001/*", "*"]'
       KEYCLOAK_MO_CLIENT_WEB_ORIGIN: '["http://localhost:5001", "*"]'
       KEYCLOAK_EGIR_CLIENT_REDIRECT_URI: '["http://google.dk/*", "*"]'

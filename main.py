@@ -50,6 +50,11 @@ class KeycloakUser(BaseModel):
     def set_uuid(cls, _uuid: Optional[UUID]) -> UUID:
         return _uuid or uuid4()
 
+class KeycloakClient(BaseModel):
+    client_id: str
+    client_secret: str
+    token_lifespan: PositiveInt = 300
+
 
 class Settings(BaseSettings):
     # Keycloak version
@@ -58,6 +63,8 @@ class Settings(BaseSettings):
 
     # Display name shown on the main Keycloak user login page
     keycloak_realm_display_name: str = "OS2mo"
+
+    keycloak_api_clients: Optional[List[KeycloakClient]]
 
     # Frontend page(s) that Keycloak is allowed to redirect users back to after they
     # have authenticated successfully in Keycloak

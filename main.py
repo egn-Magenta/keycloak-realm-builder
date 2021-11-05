@@ -133,7 +133,10 @@ class Settings(BaseSettings):
     # LoRa
     keycloak_lora_realm_enabled: bool = False
     keycloak_lora_client_secret: Optional[str]
+    keycloak_lora_dipex_client_enabled: bool = False
+    keycloak_lora_dipex_client_secret: Optional[str]
     keycloak_lora_token_lifespan: PositiveInt = 300
+    keycloak_lora_dipex_token_lifespan: PositiveInt = 300
 
     @root_validator
     def optionally_required(cls, values: Dict[str, Any]) -> Dict[str, Any]:
@@ -149,6 +152,7 @@ class Settings(BaseSettings):
             "keycloak_dipex_client_enabled": ("keycloak_dipex_client_secret",),
             "keycloak_egir_client_enabled": ("keycloak_egir_client_secret",),
             "keycloak_lora_realm_enabled": ("keycloak_lora_client_secret",),
+            "keycloak_lora_dipex_client_enabled": ("keycloak_lora_dipex_client_secret",),
         }
         for main_key, required_keys in optionally_required_fields.items():
             if not values[main_key]:

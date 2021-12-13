@@ -1,19 +1,16 @@
 # SPDX-FileCopyrightText: Magenta ApS
 #
 # SPDX-License-Identifier: MPL-2.0
-FROM python:3.9-slim
+FROM hashicorp/terraform:1.1.0
 
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    POETRY_VIRTUALENVS_CREATE=false \
-    POETRY_NO_INTERACTION=1
-RUN pip install --no-cache-dir poetry==1.0.3
+    PYTHONDONTWRITEBYTECODE=1
 
-WORKDIR /opt
-COPY poetry.lock pyproject.toml ./
-RUN poetry install --no-dev
+RUN apk add python3 py3-pip
+RUN pip install --no-cache-dir click pydantic[email]
 
 WORKDIR /app
-COPY keycloak-realm.json.j2 .
 COPY main.py .
-CMD [ "python", "./main.py" ]
+COPY keycloak.tf .
+COPY run.sh .
+ENTRYPOINT [ "sh", "run.sh" ]

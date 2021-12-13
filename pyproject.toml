@@ -12,9 +12,7 @@ keywords = ["os2mo", "keycloak"]
 [tool.poetry.dependencies]
 python = "^3.8"
 pydantic = {extras = ["email"], version = "^1.8.2"}
-python-dateutil = "2.8.1"
 click = "^8.0.1"
-Jinja2 = "^3.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "6.2.3"

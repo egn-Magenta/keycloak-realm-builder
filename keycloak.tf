@@ -178,13 +178,11 @@ variable "keycloak_lora_client_secret" {
   description = ""
 }
 
-# NOT IMPLEMENTED
 variable "keycloak_lora_dipex_client_secret" {
   type        = string
   description = ""
 }
 
-# NOT IMPLEMENTED
 variable "keycloak_lora_dipex_client_enabled" {
   type        = bool
   description = ""
@@ -449,6 +447,19 @@ resource "keycloak_openid_client" "dipex" {
   service_accounts_enabled = true
 
   client_secret = var.keycloak_dipex_client_secret
+}
+
+resource "keycloak_openid_client" "lora_dipex" {
+  count     = var.keycloak_lora_dipex_client_enabled == true ? 1 : 0
+  realm_id  = keycloak_realm.lora.id
+  client_id = "dipex"
+  enabled   = var.keycloak_lora_dipex_client_enabled
+
+  name                     = "DIPEX"
+  access_type              = "CONFIDENTIAL"
+  service_accounts_enabled = true
+
+  client_secret = var.keycloak_lora_dipex_client_secret
 }
 
 # Users

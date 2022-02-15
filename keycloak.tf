@@ -420,6 +420,15 @@ resource "keycloak_openid_client" "mo_frontend" {
   }
 }
 
+resource "keycloak_openid_user_attribute_protocol_mapper" "mo_client_uuid_mapper" {
+  realm_id       = keycloak_realm.mo.id
+  client_id      = keycloak_openid_client.mo_frontend.id
+  name           = "uuid-mapper"
+
+  user_attribute = "uuid"
+  claim_name     = "object-guid"
+}
+
 resource "keycloak_openid_client" "egir" {
   count     = var.keycloak_egir_client_enabled == true ? 1 : 0
   realm_id  = keycloak_realm.mo.id
@@ -586,6 +595,21 @@ resource "keycloak_custom_identity_provider_mapper" "adfs_owner_role_mapper" {
     syncMode          = "INHERIT"
     "attribute.name"  = "http://schemas.xmlsoap.org/claims/Group"
     "attribute.value" = "os2mo-owner"
+    "role"            = "owner"
+  }
+}
+
+resource "keycloak_custom_identity_provider_mapper" "adfs_object_guid_mapper" {
+  count                    = var.keycloak_idp_enable == true ? 1 : 0
+  realm                    = keycloak_realm.mo.id
+  name                     = "guid-mapper"
+  identity_provider_alias  = keycloak_saml_identity_provider.adfs[0].alias
+  identity_provider_mapper = "saml-user-attribute-idp-mapper"
+
+  extra_config = {
+    syncMode          = "INHERIT"
+    "attribute.name"  = "http://schemas.xmlsoap.org/claims/Group"
+    "user.attribute"  = "object-guid"
     "role"            = "owner"
   }
 }

@@ -426,7 +426,7 @@ resource "keycloak_openid_user_attribute_protocol_mapper" "mo_client_uuid_mapper
   name           = "uuid-mapper"
 
   user_attribute = "uuid"
-  claim_name     = "object-guid"
+  claim_name     = "uuid"
 }
 
 resource "keycloak_openid_client" "egir" {
